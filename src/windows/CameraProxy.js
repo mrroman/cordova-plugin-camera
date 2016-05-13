@@ -797,7 +797,9 @@ function savePhoto(picture, options, successCallback, errorCallback) {
                 resizeImage(successCallback, errorCallback, picture, options.targetWidth, options.targetHeight, options.encodingType);
             } else {
                 picture.copyAsync(getAppData().localFolder, picture.name, OptUnique).done(function (copiedFile) {
-                    successCallback("ms-appdata:///local/" + copiedFile.name);
+                    Windows.Storage.CachedFileManager.completeUpdatesAsync(copiedFile).done(function () {
+                        successCallback("ms-appdata:///local/" + copiedFile.name);
+                    }, errorCallback);
                 },errorCallback);
             }
         } else {
